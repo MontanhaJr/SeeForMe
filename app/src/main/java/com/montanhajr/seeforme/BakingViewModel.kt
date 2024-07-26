@@ -10,6 +10,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
@@ -28,6 +29,8 @@ class BakingViewModel : ViewModel() {
 
     private val _capturedImageUri = mutableStateOf<Uri?>(null)
     val capturedImageUri: MutableState<Uri?> = _capturedImageUri
+
+    val capturedImage = MutableLiveData<Bitmap?>()
 
     private val generativeModel = GenerativeModel(
         modelName = "gemini-pro-vision",
@@ -60,5 +63,7 @@ class BakingViewModel : ViewModel() {
     fun openCamera(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>) {
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         launcher.launch(intent)
+
+        println(capturedImageUri)
     }
 }
