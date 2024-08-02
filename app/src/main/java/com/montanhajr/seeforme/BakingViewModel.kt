@@ -7,9 +7,7 @@ import android.provider.MediaStore
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.result.ActivityResult
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,13 +25,8 @@ class BakingViewModel : ViewModel() {
     val uiState: StateFlow<UiState> =
         _uiState.asStateFlow()
 
-    private val _capturedImageUri = mutableStateOf<Uri?>(null)
-    val capturedImageUri: MutableState<Uri?> = _capturedImageUri
-
-    val capturedImage = MutableLiveData<Bitmap?>()
-
     private val generativeModel = GenerativeModel(
-        modelName = "gemini-pro-vision",
+        modelName = "gemini-1.5-flash",
         apiKey = BuildConfig.apiKey
     )
 
@@ -58,12 +51,5 @@ class BakingViewModel : ViewModel() {
                 _uiState.value = UiState.Error(e.localizedMessage ?: "")
             }
         }
-    }
-
-    fun openCamera(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>) {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        launcher.launch(intent)
-
-        println(capturedImageUri)
     }
 }

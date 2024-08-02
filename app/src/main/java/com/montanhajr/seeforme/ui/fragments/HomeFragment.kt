@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.navigation.fragment.findNavController
 import com.montanhajr.seeforme.BakingScreen
 import com.montanhajr.seeforme.ui.theme.SeeForMeTheme
 
@@ -44,7 +45,8 @@ class HomeFragment : Fragment() {
                         modifier = Modifier.fillMaxSize(),
                         color = MaterialTheme.colorScheme.background,
                     ) {
-                        BakingScreen()
+                        val navController = findNavController()
+                        BakingScreen(navController = navController)
                     }
                 }
             }

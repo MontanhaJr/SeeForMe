@@ -1,9 +1,6 @@
 package com.montanhajr.seeforme
 
-import android.app.Activity
 import android.graphics.BitmapFactory
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -33,6 +30,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,8 +38,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 
 val images = arrayOf(
+    R.drawable.landscape_test,
+    R.drawable.building_test,
     // Image generated using Gemini from the prompt "cupcake image"
     R.drawable.baked_goods_1,
     // Image generated using Gemini from the prompt "cookies images"
@@ -51,13 +52,16 @@ val images = arrayOf(
 )
 val imageDescriptions = arrayOf(
     R.string.image1_description,
+    R.string.image1_description,
+    R.string.image1_description,
     R.string.image2_description,
     R.string.image3_description,
 )
 
 @Composable
 fun BakingScreen(
-    bakingViewModel: BakingViewModel = viewModel()
+    bakingViewModel: BakingViewModel = viewModel(),
+    navController: NavController = NavController(context = LocalContext.current)
 ) {
     val selectedImage = remember { mutableIntStateOf(0) }
     val placeholderPrompt = stringResource(R.string.prompt_placeholder)
@@ -66,14 +70,6 @@ fun BakingScreen(
     var result by rememberSaveable { mutableStateOf(placeholderResult) }
     val uiState by bakingViewModel.uiState.collectAsState()
     val context = LocalContext.current
-
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            bakingViewModel.capturedImageUri.value = result.data?.data
-        }
-    }
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -101,7 +97,8 @@ fun BakingScreen(
                 Image(
                     painter = painterResource(image),
                     contentDescription = stringResource(imageDescriptions[index]),
-                    modifier = imageModifier
+                    modifier = imageModifier,
+                    contentScale = ContentScale.Crop
                 )
             }
         }
@@ -115,32 +112,37 @@ fun BakingScreen(
                 onValueChange = { prompt = it },
                 modifier = Modifier
                     .weight(0.8f)
-                    .padding(end = 16.dp)
                     .align(Alignment.CenterVertically)
             )
-
-            Button(
-                onClick = {
-                    val bitmap = BitmapFactory.decodeResource(
-                        context.resources,
-                        images[selectedImage.intValue]
-                    )
-                    bakingViewModel.sendPrompt(bitmap, prompt)
-                },
-                enabled = prompt.isNotEmpty(),
+            Column(
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
-            ) {
-                Text(text = stringResource(R.string.action_go))
-            }
-            Button(onClick = {
-                bakingViewModel.openCamera(launcher)
-            },
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
                     .padding(start = 16.dp)
+                    .align(Alignment.CenterVertically)
             ) {
-                Text(text = "Open Camera")
+                Button(
+                    onClick = {
+                        val bitmap = BitmapFactory.decodeResource(
+                            context.resources,
+                            images[selectedImage.intValue]
+                        )
+                        bakingViewModel.sendPrompt(bitmap, prompt)
+                    },
+                    enabled = prompt.isNotEmpty(),
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = stringResource(R.string.action_go))
+                }
+
+                Button(
+                    onClick = {
+                        navController.navigate(R.id.action_homeFragment_to_cameraFragment)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    Text(text = "Open Camera")
+                }
             }
         }
 
