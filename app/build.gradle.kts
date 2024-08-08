@@ -47,6 +47,14 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/native-image/macosx-arm64/jnijavacpp/jni-config.json"
+            excludes += "META-INF/native-image/macosx-arm64/jnijavacpp/reflect-config.json"
+            excludes += "META-INF/native-image/macosx-x86_64/jnijavacpp/jni-config.json"
+            excludes += "META-INF/native-image/macosx-x86_64/jnijavacpp/reflect-config.json"
+            excludes += "META-INF/native-image/windows-x86_64/jnijavacpp/jni-config.json"
+            excludes += "META-INF/native-image/windows-x86_64/jnijavacpp/reflect-config.json"
+            excludes += "META-INF/native-image/linux-x86_64/jnijavacpp/jni-config.json"
+            excludes += "META-INF/native-image/linux-x86_64/jnijavacpp/reflect-config.json"
         }
     }
 }
@@ -70,6 +78,10 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.smile.nlp)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
