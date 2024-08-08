@@ -6,6 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.montanhajr.seeforme.BuildConfig
+import com.montanhajr.seeforme.ui.fragments.CameraViewModel.Constant.MODEL_NAME
+import com.montanhajr.seeforme.ui.fragments.CameraViewModel.Constant.SIMILARITY_THRESHOLD
+import com.montanhajr.seeforme.util.cosineSimilarity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +18,8 @@ import kotlinx.coroutines.launch
 class CameraViewModel : ViewModel() {
 
     sealed class UiState {
-        object Initial : UiState()
-        object Loading : UiState()
+        data object Initial : UiState()
+        data object Loading : UiState()
         data class Success(val output: String) : UiState()
         data class Error(val message: String) : UiState()
     }
@@ -25,13 +28,17 @@ class CameraViewModel : ViewModel() {
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val generativeModel = GenerativeModel(
-        modelName = "gemini-1.5-flash",
+        modelName = MODEL_NAME,
         apiKey = BuildConfig.apiKey
     )
 
     private var isFirstRequest = true
+    private var lastOutput: String? = null
 
-    fun sendPrompt(bitmap: Bitmap, prompt: String) {
+    fun sendPrompt(
+        bitmap: Bitmap,
+        prompt: String
+    ) {
         if (isFirstRequest) {
             _uiState.value = UiState.Loading
         }
@@ -45,12 +52,28 @@ class CameraViewModel : ViewModel() {
                     }
                 )
                 response.text?.let { outputContent ->
-                    _uiState.value = UiState.Success(outputContent)
+                    if (shouldUpdateOutput(outputContent)) {
+                        _uiState.value = UiState.Success(outputContent)
+                        lastOutput = outputContent
+                    }
                     isFirstRequest = false
                 }
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.localizedMessage ?: "")
             }
         }
+    }
+
+    private fun shouldUpdateOutput(newOutput: String): Boolean {
+        lastOutput?.let {
+            val similarity = it.cosineSimilarity(newOutput)
+            return similarity < SIMILARITY_THRESHOLD
+        }
+        return true
+    }
+
+    private object Constant {
+        const val MODEL_NAME = "gemini-1.5-flash"
+        const val SIMILARITY_THRESHOLD = 0.5
     }
 }

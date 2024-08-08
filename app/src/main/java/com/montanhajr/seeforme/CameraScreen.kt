@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.camera.core.Preview as CameraPreview
@@ -31,8 +32,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.focused
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,31 +53,63 @@ fun CameraScreen() {
     val viewModel: CameraViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    val focusRequester = remember { FocusRequester() }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        CameraPreview(
+            viewModel = viewModel,
+            prompt = "Descreva o que você está vendo, utilize sempre a língua portuguesa na resposta, " +
+                    "podendo usar termos em inglês comuns no Brasil caso necessário. A resposta deve ter no máximo 30 palavras"
+        )
+
+        // Sempre visível mas controlando a visibilidade real
         when (uiState) {
             is CameraViewModel.UiState.Initial -> {
-                Text("Inicializando...")
                 Log.d("CameraScreen", "Inicializando...")
             }
+
             is CameraViewModel.UiState.Loading -> {
-                CircularProgressIndicator()
-                Log.d("CameraScreen", "Carregando...")
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
             }
+
             is CameraViewModel.UiState.Success -> {
                 val result = (uiState as CameraViewModel.UiState.Success).output
-                Text(text = result)
-                Log.d("CameraScreen", "Sucesso: $result")
+                LaunchedEffect(result) {
+                    focusRequester.requestFocus()
+                }
+                TalkBackText(result, focusRequester)
             }
+
             is CameraViewModel.UiState.Error -> {
                 val error = (uiState as CameraViewModel.UiState.Error).message
-                Text(text = error)
-                Log.d("CameraScreen", "Erro: $error")
+                LaunchedEffect(error) {
+                    focusRequester.requestFocus()
+                }
+                TalkBackText(error, focusRequester)
             }
         }
-
     }
-    CameraPreview(viewModel = viewModel, prompt = "Descreva o que está vendo")
 }
+
+@Composable
+fun TalkBackText(text: String, focusRequester: FocusRequester) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .padding(16.dp)
+            .focusRequester(focusRequester)
+            .focusable()
+            .semantics {
+                contentDescription = text
+            }
+            .background(MaterialTheme.colorScheme.background.copy(alpha = 0.7f))
+            .padding(16.dp)
+    )
+}
+
 
 @Composable
 fun CameraPreview(
@@ -96,7 +136,6 @@ fun CameraPreview(
         }
 
         val imageCapture = ImageCapture.Builder().build()
-
         val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
         cameraProvider.unbindAll()
@@ -117,41 +156,10 @@ fun CameraPreview(
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        AndroidView(
-            factory = { previewView },
-            modifier = Modifier.fillMaxSize()
-        )
-
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-                .align(Alignment.BottomStart)
-                .background(MaterialTheme.colorScheme.background.copy(alpha = 0.7f)),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            val uiState by viewModel.uiState.collectAsState()
-
-            when (uiState) {
-                is CameraViewModel.UiState.Initial -> {
-                    Text("Inicializando...")
-                }
-                is CameraViewModel.UiState.Loading -> {
-                    CircularProgressIndicator()
-                }
-                is CameraViewModel.UiState.Success -> {
-                    val result = (uiState as CameraViewModel.UiState.Success).output
-                    Text(text = result)
-                }
-                is CameraViewModel.UiState.Error -> {
-                    val error = (uiState as CameraViewModel.UiState.Error).message
-                    Text(text = error)
-                }
-            }
-        }
-    }
+    AndroidView(
+        factory = { previewView },
+        modifier = Modifier.fillMaxSize()
+    )
 }
 
 private fun captureAndSendImage(
