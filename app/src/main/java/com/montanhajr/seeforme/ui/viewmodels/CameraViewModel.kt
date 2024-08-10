@@ -1,4 +1,4 @@
-package com.montanhajr.seeforme.ui.fragments
+package com.montanhajr.seeforme.ui.viewmodels
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
@@ -6,8 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.montanhajr.seeforme.BuildConfig
-import com.montanhajr.seeforme.ui.fragments.CameraViewModel.Constant.MODEL_NAME
-import com.montanhajr.seeforme.ui.fragments.CameraViewModel.Constant.SIMILARITY_THRESHOLD
+import com.montanhajr.seeforme.ui.viewmodels.CameraViewModel.Constant.MODEL_NAME
+import com.montanhajr.seeforme.ui.viewmodels.CameraViewModel.Constant.SIMILARITY_THRESHOLD
 import com.montanhajr.seeforme.util.cosineSimilarity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
