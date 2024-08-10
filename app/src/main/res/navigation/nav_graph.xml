@@ -11,10 +11,18 @@
         <action
             android:id="@+id/action_homeFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_readFragment"
+            app:destination="@id/readFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/cameraFragment"
         android:name="com.montanhajr.seeforme.ui.fragments.CameraFragment"
         android:label="CameraFragment" />
+
+    <fragment
+        android:id="@+id/readFragment"
+        android:name="com.montanhajr.seeforme.ui.fragments.ReadFragment"
+        android:label="ReadFragment" />
 </navigation>

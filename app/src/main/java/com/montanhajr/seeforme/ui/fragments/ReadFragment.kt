@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.montanhajr.seeforme.ui.screens.SeeForMeScreen
+import com.montanhajr.seeforme.ui.screens.ReadForMeScreen
 
-class CameraFragment : Fragment() {
+class ReadFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -16,7 +16,7 @@ class CameraFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                SeeForMeScreen()
+                ReadForMeScreen()
             }
         }
     }

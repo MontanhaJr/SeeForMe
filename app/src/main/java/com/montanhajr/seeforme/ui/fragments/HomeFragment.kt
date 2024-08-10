@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.navigation.fragment.findNavController
-import com.montanhajr.seeforme.HomeScreen
+import com.montanhajr.seeforme.ui.screens.HomeScreen
 import com.montanhajr.seeforme.ui.theme.SeeForMeTheme
 import com.montanhajr.seeforme.ui.viewmodels.HomeViewModel
 

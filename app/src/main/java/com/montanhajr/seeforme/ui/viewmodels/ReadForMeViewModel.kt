@@ -7,16 +7,14 @@ import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.montanhajr.seeforme.BuildConfig
 import com.montanhajr.seeforme.interfaces.IImageProcessor
-import com.montanhajr.seeforme.ui.viewmodels.CameraViewModel.Constant.MODEL_NAME
-import com.montanhajr.seeforme.ui.viewmodels.CameraViewModel.Constant.SIMILARITY_THRESHOLD
-import com.montanhajr.seeforme.util.cosineSimilarity
+import com.montanhajr.seeforme.ui.viewmodels.ReadForMeViewModel.Constant.MODEL_NAME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CameraViewModel : ViewModel(), IImageProcessor {
+class ReadForMeViewModel : ViewModel(), IImageProcessor {
 
     sealed class UiState {
         data object Initial : UiState()
@@ -27,6 +25,10 @@ class CameraViewModel : ViewModel(), IImageProcessor {
 
     private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Initial)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun startLoading() {
+        _uiState.value = UiState.Loading
+    }
 
     private val generativeModel = GenerativeModel(
         modelName = MODEL_NAME,
@@ -53,10 +55,10 @@ class CameraViewModel : ViewModel(), IImageProcessor {
                     }
                 )
                 response.text?.let { outputContent ->
-                    if (shouldUpdateOutput(outputContent)) {
-                        _uiState.value = UiState.Success(outputContent)
-                        lastOutput = outputContent
-                    }
+
+                    _uiState.value = UiState.Success(outputContent)
+                    lastOutput = outputContent
+
                     isFirstRequest = false
                 }
             } catch (e: Exception) {
@@ -65,16 +67,7 @@ class CameraViewModel : ViewModel(), IImageProcessor {
         }
     }
 
-    private fun shouldUpdateOutput(newOutput: String): Boolean {
-        lastOutput?.let {
-            val similarity = it.cosineSimilarity(newOutput)
-            return similarity < SIMILARITY_THRESHOLD
-        }
-        return true
-    }
-
     private object Constant {
         const val MODEL_NAME = "gemini-1.5-flash"
-        const val SIMILARITY_THRESHOLD = 0.5
     }
 }
