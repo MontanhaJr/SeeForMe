@@ -79,7 +79,7 @@ fun HomeScreen(
                 text = "FIND FOR ME",
                 backgroundColor = Color(0xFFCA530B),
                 onClick = {
-                    // Ação do botão 3
+                    navController.navigate(R.id.action_homeFragment_to_findFragment)
                 }
             )
 

@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_homeFragment_to_readFragment"
             app:destination="@id/readFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_findFragment"
+            app:destination="@id/findFragment" />
     </fragment>
 
     <fragment
@@ -25,4 +28,9 @@
         android:id="@+id/readFragment"
         android:name="com.montanhajr.seeforme.ui.fragments.ReadFragment"
         android:label="ReadFragment" />
+
+    <fragment
+        android:id="@+id/findFragment"
+        android:name="com.montanhajr.seeforme.ui.fragments.FindFragment"
+        android:label="FindFragment" />
 </navigation>
