@@ -28,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,7 @@ import com.montanhajr.seeforme.R
 import com.montanhajr.seeforme.ui.CameraScreenPreview
 import com.montanhajr.seeforme.ui.TalkBackText
 import com.montanhajr.seeforme.ui.viewmodels.FindForMeViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun FindForMeScreen(navController: NavController = NavController(context = LocalContext.current)) {
@@ -71,6 +73,10 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
                     .align(Alignment.Center)
                     .padding(16.dp)
             ) {
+                LaunchedEffect(Unit) {
+                    delay(100) // delay for talkback focus
+                    focusRequester.requestFocus()
+                }
                 TalkBackText(
                     text = recordedText,
                     focusRequester
