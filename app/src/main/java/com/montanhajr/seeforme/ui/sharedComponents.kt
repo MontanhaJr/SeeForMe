@@ -28,6 +28,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -45,9 +46,6 @@ fun TalkBackText(text: String, focusRequester: FocusRequester) {
             .padding(16.dp)
             .focusRequester(focusRequester)
             .focusable()
-            .semantics {
-                contentDescription = text
-            }
             .background(
                 MaterialTheme.colorScheme.background.copy(
                     alpha = 0.7f,
@@ -59,11 +57,16 @@ fun TalkBackText(text: String, focusRequester: FocusRequester) {
             .padding(16.dp)
             .heightIn(max = maxHeight)
             .verticalScroll(rememberScrollState())
+            .clearAndSetSemantics {
+                contentDescription = text
+            }
     ) {
         Text(
             text = text,
             fontSize = 18.sp,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusable(false)
         )
     }
 }

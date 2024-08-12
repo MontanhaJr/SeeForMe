@@ -26,5 +26,7 @@
 
     <!-- Read For Me Screen -->
     <string name="instruction_text">Click the button to take a photo and read the text from the image</string>
+    <string name="progress_indicator_loading">Loading…</string>
+    <string name="take_picture_button">Take picture</string>
 
 </resources>

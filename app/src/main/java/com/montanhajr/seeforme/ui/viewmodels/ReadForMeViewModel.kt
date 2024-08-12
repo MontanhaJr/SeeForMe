@@ -35,16 +35,11 @@ class ReadForMeViewModel : ViewModel(), IImageProcessor {
         apiKey = BuildConfig.apiKey
     )
 
-    private var isFirstRequest = true
-    private var lastOutput: String? = null
-
     override fun sendPrompt(
         bitmap: Bitmap,
         prompt: String
     ) {
-        if (isFirstRequest) {
-            _uiState.value = UiState.Loading
-        }
+        _uiState.value = UiState.Loading
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -55,11 +50,7 @@ class ReadForMeViewModel : ViewModel(), IImageProcessor {
                     }
                 )
                 response.text?.let { outputContent ->
-
                     _uiState.value = UiState.Success(outputContent)
-                    lastOutput = outputContent
-
-                    isFirstRequest = false
                 }
             } catch (e: Exception) {
                 _uiState.value = UiState.Error(e.localizedMessage ?: "")
