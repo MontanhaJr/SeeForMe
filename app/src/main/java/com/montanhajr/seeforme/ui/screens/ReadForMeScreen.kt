@@ -25,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.montanhajr.seeforme.R
 import com.montanhajr.seeforme.ui.CameraScreenPreview
 import com.montanhajr.seeforme.ui.TalkBackText
 import com.montanhajr.seeforme.ui.viewmodels.ReadForMeViewModel
@@ -43,9 +45,7 @@ fun ReadForMeScreen() {
 
     val focusRequester = remember { FocusRequester() }
 
-    val prompt =
-        "Essa imagem contém um texto para ser lido. Se for uma foto de um documento, apenas leia todo o texto do documento" +
-                "Caso a imagem seja de um local ou objeto com escritas, descreva o local de forma sucinta e leia o que está escrito"
+    val prompt = stringResource(id = R.string.readForMe_prompt)
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -57,14 +57,14 @@ fun ReadForMeScreen() {
 
         if (isTextVisible) {
             TalkBackText(
-                "Clique no botão para tirar uma foto e ler os textos da imagem",
+                stringResource(id = R.string.instruction_text),
                 focusRequester
             )
         }
 
         when (uiState) {
             is ReadForMeViewModel.UiState.Initial -> {
-                Log.d("CameraScreen", "Inicializando...")
+                Log.d("CameraScreen", "Starting...")
             }
 
             is ReadForMeViewModel.UiState.Loading -> {

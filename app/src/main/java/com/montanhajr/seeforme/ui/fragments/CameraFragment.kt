@@ -17,7 +17,7 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
-            val prompt = arguments?.getString("prompt")
+            val prompt = arguments?.getString("prompt").takeIf { !it.isNullOrEmpty() }
 
             setContent {
                 SeeForMeScreen(prompt ?: stringResource(id = R.string.seeForMe_prompt))

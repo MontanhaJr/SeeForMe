@@ -1,6 +1,7 @@
 package com.montanhajr.seeforme.ui.screens
 
 import android.content.Context
+import java.util.Locale
 import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognitionListener
@@ -27,7 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,11 +46,6 @@ import com.montanhajr.seeforme.R
 import com.montanhajr.seeforme.ui.CameraScreenPreview
 import com.montanhajr.seeforme.ui.TalkBackText
 import com.montanhajr.seeforme.ui.viewmodels.FindForMeViewModel
-import com.montanhajr.seeforme.util.captureAndSendImage
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @Composable
 fun FindForMeScreen(navController: NavController = NavController(context = LocalContext.current)) {
@@ -99,7 +94,7 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
                             containerColor = Color(0xFFF48440)
                         )
                     ) {
-                        Text("Gravar novamente")
+                        Text(stringResource(id = R.string.record_again_button))
                     }
 
                     Spacer(modifier = Modifier.width(16.dp))
@@ -114,7 +109,7 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
                             navController.navigate(R.id.action_findFragment_to_cameraFragment, bundle)
                         }
                     }) {
-                        Text("Iniciar Busca")
+                        Text(stringResource(id = R.string.start_looking_button))
                     }
                 }
             }
@@ -144,14 +139,14 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
                     if (!isRecording) {
                         Icon(
                             Icons.Default.Mic,
-                            contentDescription = "Gravar",
+                            contentDescription = stringResource(id = R.string.accesibility_record_button),
                             modifier = Modifier.size(30.dp),
                             tint = Color(0xFFF48440)
                         )
                     } else {
                         Icon(
                             Icons.Default.Stop,
-                            contentDescription = "Gravando",
+                            contentDescription = stringResource(id = R.string.accesibility_stop_button),
                             modifier = Modifier.size(30.dp),
                             tint = Color(0xFFF48440)
                         )
@@ -163,14 +158,15 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
 }
 
 private fun startRecordingAudio(context: Context, speechRecognizer: SpeechRecognizer, onTranscriptionComplete: (String) -> Unit) {
+    val deviceLanguage = Locale.getDefault().toString()
     val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
         putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        putExtra(RecognizerIntent.EXTRA_LANGUAGE, "pt-BR")
+        putExtra(RecognizerIntent.EXTRA_LANGUAGE, deviceLanguage)
     }
 
     speechRecognizer.setRecognitionListener(object : RecognitionListener {
         override fun onReadyForSpeech(params: Bundle?) {
-            Toast.makeText(context, "Iniciando gravação...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.recording_started_text), Toast.LENGTH_SHORT).show()
         }
 
         override fun onBeginningOfSpeech() {
@@ -187,19 +183,19 @@ private fun startRecordingAudio(context: Context, speechRecognizer: SpeechRecogn
 
         override fun onEndOfSpeech() {
             // Called when the user stops speaking
-            Toast.makeText(context, "Processando áudio...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.recording_ended_text), Toast.LENGTH_SHORT).show()
         }
 
         override fun onError(error: Int) {
-            Toast.makeText(context, "Erro na gravação: $error", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.recording_error_text, error.toString()), Toast.LENGTH_SHORT).show()
         }
 
         override fun onResults(results: Bundle?) {
             val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
             if (!matches.isNullOrEmpty()) {
-                onTranscriptionComplete(matches[0]) // Use the first result
+                onTranscriptionComplete(matches[0])
             } else {
-                Toast.makeText(context, "Nenhum texto reconhecido", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, context.getString(R.string.recording_unknown_text), Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.montanhajr.seeforme.ui.viewmodels.HomeViewModel
 import androidx.compose.foundation.layout.*
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.montanhajr.seeforme.R
@@ -42,7 +43,7 @@ fun HomeScreen(
         Image(
             painter = painterResource(id = R.drawable.background),
             contentScale = ContentScale.Crop,
-            contentDescription = null, // Descrição acessível opcional
+            contentDescription = null,
             modifier = Modifier.fillMaxSize()
         )
         Column(
@@ -55,12 +56,12 @@ fun HomeScreen(
             Image(
                 painter = painterResource(id = R.drawable.see_for_me_logo),
                 contentScale = ContentScale.Crop,
-                contentDescription = "Logo do App com a escrita See For Me",
+                contentDescription = stringResource(id = R.string.accessibility_text_logo),
                 modifier = Modifier.size(300.dp)
             )
 
             HomeButton(
-                text = "SEE FOR ME",
+                text = stringResource(id = R.string.see_for_me_button_home),
                 backgroundColor = Color(0xFFCA530B),
                 onClick = {
                     navController.navigate(R.id.action_homeFragment_to_cameraFragment)
@@ -68,7 +69,7 @@ fun HomeScreen(
             )
 
             HomeButton(
-                text = "READ FOR ME",
+                text = stringResource(id = R.string.read_for_me_button_home),
                 backgroundColor = Color(0xFFF48440),
                 onClick = {
                     navController.navigate(R.id.action_homeFragment_to_readFragment)
@@ -76,7 +77,7 @@ fun HomeScreen(
             )
 
             HomeButton(
-                text = "FIND FOR ME",
+                text = stringResource(id = R.string.find_for_me_button_home),
                 backgroundColor = Color(0xFFCA530B),
                 onClick = {
                     navController.navigate(R.id.action_homeFragment_to_findFragment)

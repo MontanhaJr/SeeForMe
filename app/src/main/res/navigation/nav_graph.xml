@@ -36,7 +36,7 @@
 
         <argument
             android:name="prompt"
-            android:defaultValue="Test prompt"
+            android:defaultValue=""
             app:argType="string" />
 
     </fragment>

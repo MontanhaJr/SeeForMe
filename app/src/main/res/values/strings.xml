@@ -1,14 +1,29 @@
 <resources>
     <string name="app_name">SeeForMe</string>
-    <string name="action_go">Go</string>
-    <string name="baking_title">Baking with Gemini</string>
-    <string name="label_prompt">Prompt</string>
-    <string name="prompt_placeholder">Descreva com detalhes com pelo menos 50 palavras o que voce ve, descreva como se estivesse falando para alguém com deficiência visual</string>
-    <string name="image1_description">Cupcake</string>
-    <string name="image2_description">Cookies</string>
-    <string name="image3_description">Cake</string>
-    <string name="results_placeholder">(Results will appear here)</string>
 
-    <string name="seeForMe_prompt">Descreva o que você está vendo, utilize sempre a língua portuguesa na resposta podendo usar termos em inglês comuns no Brasil caso necessário. A resposta deve ter no máximo 30 palavras</string>
-    <string name="findForMe_prompt">Estou procurando %1$s. Se ele está nessa imagem, me descreva o local que está, se não está aqui, apenas responda "Não encontrei, mova a câmera para outro lugar"</string>
+    <string name="seeForMe_prompt">Descreva o que você está vendo, utilize sempre a língua portuguesa na resposta. A resposta deve ter no máximo 30 palavras</string>
+    <string name="findForMe_prompt">Estou procurando %1$s. Se ele está nessa imagem, me descreva o local que está, se não está aqui, apenas responda "Não encontrei, mova a câmera para outro lugar</string>
+    <string name="readForMe_prompt">Essa imagem contém um texto para ser lido. Se for uma foto de um documento, apenas leia todo o texto do documento. Caso a imagem seja de um local ou objeto com escritas, descreva o local de forma sucinta e leia o que está escrito</string>
+
+    <!--    Home Screen-->
+    <string name="accessibility_text_logo">Logo do App com a escrita See For Me</string>
+    <string name="see_for_me_button_home">Veja para Mim</string>
+    <string name="read_for_me_button_home">Leia para Mim</string>
+    <string name="find_for_me_button_home">Encontre para Mim</string>
+
+    <!--    See For Me Screen-->
+
+    <!--    Find For Me Screen-->
+    <string name="record_again_button">Gravar novamente</string>
+    <string name="start_looking_button">Começar a procurar</string>
+    <string name="accesibility_record_button">Gravar</string>
+    <string name="accesibility_stop_button">Parar</string>
+    <string name="recording_started_text">Gravação iniciada…</string>
+    <string name="recording_ended_text">Processando áudio…</string>
+    <string name="recording_error_text">Erro na gravação %1$s</string>
+    <string name="recording_unknown_text">Não entendi, pode gravar novamente?</string>
+
+    <!--    Read For Me Screen-->
+    <string name="instruction_text">Clique no botão para tirar uma foto e ler os textos da imagem</string>
+
 </resources>

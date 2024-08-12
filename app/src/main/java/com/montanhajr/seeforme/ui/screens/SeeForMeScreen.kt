@@ -46,7 +46,7 @@ fun SeeForMeScreen(prompt: String = "") {
                 CoroutineScope(Dispatchers.Main).launch {
                     while (true) {
                         captureAndSendImage(imageCapture, context, viewModel, prompt)
-                        delay(5000) // Intervalo de 5 segundos
+                        delay(5000)
                     }
                 }
             }
@@ -54,7 +54,7 @@ fun SeeForMeScreen(prompt: String = "") {
 
         when (uiState) {
             is CameraViewModel.UiState.Initial -> {
-                Log.d("CameraScreen", "Inicializando...")
+                Log.d("CameraScreen", "Starting...")
             }
 
             is CameraViewModel.UiState.Loading -> {
