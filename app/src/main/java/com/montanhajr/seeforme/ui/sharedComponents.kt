@@ -44,8 +44,6 @@ fun TalkBackText(text: String, focusRequester: FocusRequester) {
     Box(
         modifier = Modifier
             .padding(16.dp)
-            .focusRequester(focusRequester)
-            .focusable()
             .background(
                 MaterialTheme.colorScheme.background.copy(
                     alpha = 0.7f,
@@ -57,6 +55,8 @@ fun TalkBackText(text: String, focusRequester: FocusRequester) {
             .padding(16.dp)
             .heightIn(max = maxHeight)
             .verticalScroll(rememberScrollState())
+            .focusRequester(focusRequester)
+            .focusable()
             .clearAndSetSemantics {
                 contentDescription = text
             }
@@ -66,7 +66,7 @@ fun TalkBackText(text: String, focusRequester: FocusRequester) {
             fontSize = 18.sp,
             modifier = Modifier
                 .fillMaxWidth()
-                .focusable(false)
+                .focusable(true)
         )
     }
 }

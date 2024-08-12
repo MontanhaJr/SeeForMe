@@ -68,6 +68,7 @@ fun SeeForMeScreen(prompt: String = "") {
                 val result = (uiState as CameraViewModel.UiState.Success).output
                 LaunchedEffect(result) {
                     focusRequester.requestFocus()
+                    delay(100)
                 }
                 TalkBackText(result, focusRequester)
             }
