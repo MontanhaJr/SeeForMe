@@ -3,7 +3,6 @@ package com.montanhajr.seeforme.ui.screens
 import android.util.Log
 import androidx.camera.core.ImageCapture
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,7 +12,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -66,7 +64,7 @@ fun ReadForMeScreen() {
                 focusRequester.requestFocus()
             }
             TalkBackText(
-                text = stringResource(id = R.string.instruction_text),
+                text = stringResource(id = R.string.instruction_read_for_me_text),
                 focusRequester = focusRequester
             )
         }

@@ -14,9 +14,10 @@
 
     <!-- See For Me Screen -->
 
-    <!-- Find For Me Screen -->
-    <string name="record_again_button">Record Again</string>
-    <string name="start_looking_button">Start Looking</string>
+    <!--    Find For Me Screen-->
+    <string name="instruction_find_for_me_text">Tap the button below to record an audio with the name of what you want to find</string>
+    <string name="record_again_button">Record again</string>
+    <string name="start_looking_button">Start looking</string>
     <string name="accesibility_record_button">Record</string>
     <string name="accesibility_stop_button">Stop</string>
     <string name="recording_started_text">Recording started…</string>
@@ -24,8 +25,8 @@
     <string name="recording_error_text">Recording error %1$s</string>
     <string name="recording_unknown_text">I didn’t understand, can you record again?</string>
 
-    <!-- Read For Me Screen -->
-    <string name="instruction_text">Click the button to take a photo and read the text from the image</string>
+    <!--    Read For Me Screen-->
+    <string name="instruction_read_for_me_text">Tap the button below to take a photo and read the text in the image</string>
     <string name="progress_indicator_loading">Loading…</string>
     <string name="take_picture_button">Take picture</string>
 

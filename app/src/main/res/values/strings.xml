@@ -14,6 +14,7 @@
     <!--    See For Me Screen-->
 
     <!--    Find For Me Screen-->
+    <string name="instruction_find_for_me_text">Clique no botão abaixo para gravar um áudio com o nome do que você quer encontrar</string>
     <string name="record_again_button">Gravar novamente</string>
     <string name="start_looking_button">Começar a procurar</string>
     <string name="accesibility_record_button">Gravar</string>
@@ -24,7 +25,7 @@
     <string name="recording_unknown_text">Não entendi, pode gravar novamente?</string>
 
     <!--    Read For Me Screen-->
-    <string name="instruction_text">Clique no botão para tirar uma foto e ler os textos da imagem</string>
+    <string name="instruction_read_for_me_text">Clique no botão abaixo para tirar uma foto e ler os textos da imagem</string>
     <string name="progress_indicator_loading">Carregando…</string>
     <string name="take_picture_button">Tirar foto</string>
 

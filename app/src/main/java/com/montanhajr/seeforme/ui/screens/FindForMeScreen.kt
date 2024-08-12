@@ -54,6 +54,7 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
     val context = LocalContext.current
     val viewModel: FindForMeViewModel = viewModel()
     val focusRequester = remember { FocusRequester() }
+    var isTextVisible by remember { mutableStateOf(true) }
     var isRecording by remember { mutableStateOf(false) }
     var recordedText by remember { mutableStateOf("") }
     var showTextOptions by remember { mutableStateOf(false) }
@@ -66,6 +67,17 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
                 imageCapture = capture
             }
         )
+
+        if (isTextVisible) {
+            LaunchedEffect(Unit) {
+                delay(100) // delay for talkback focus
+                focusRequester.requestFocus()
+            }
+            TalkBackText(
+                text = stringResource(id = R.string.instruction_find_for_me_text),
+                focusRequester = focusRequester
+            )
+        }
 
         if (showTextOptions) {
             Column(
@@ -127,6 +139,7 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
             ) {
                 IconButton(
                     onClick = {
+                        isTextVisible = false
                         isRecording = !isRecording
                         if (isRecording) {
                             startRecordingAudio(context, speechRecognizer) { transcription ->
