@@ -2,6 +2,12 @@
 <resources>
     <string name="app_name">SeeForMe</string>
 
+    <string name="permission_dialog_title">Permission Needed</string>
+    <string name="permission_dialog_body">This app requires camera and microphone access permission to function properly. Please grant access to continue using the app.</string>
+    <string name="permission_dialog_ok">OK</string>
+    <string name="permission_dialog_cancel">Cancel</string>
+
+
     <string name="seeForMe_prompt">Describe what you are seeing, always use English in the response. The response should be no more than 30 words</string>
     <string name="findForMe_prompt">I am looking for %1$s. If it is in this image, describe the location where it is. If it is not here, just respond "Not found, move the camera elsewhere"</string>
     <string name="readForMe_prompt">This image contains text to be read. If it is a photo of a document, read all the text from the document. If the image is of a place or object with writings, briefly describe the place and read what is written</string>
@@ -21,8 +27,7 @@
     <string name="accesibility_record_button">Record</string>
     <string name="accesibility_stop_button">Stop</string>
     <string name="recording_started_text">Recording started…</string>
-    <string name="recording_ended_text">Processing audio…</string>
-    <string name="recording_error_text">Recording error %1$s</string>
+    <string name="recording_error_text">Recording error, try again…</string>
     <string name="recording_unknown_text">I didn’t understand, can you record again?</string>
 
     <!--    Read For Me Screen-->

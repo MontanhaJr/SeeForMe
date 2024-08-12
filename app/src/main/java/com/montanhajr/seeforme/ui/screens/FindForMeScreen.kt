@@ -52,12 +52,12 @@ import kotlinx.coroutines.delay
 @Composable
 fun FindForMeScreen(navController: NavController = NavController(context = LocalContext.current)) {
     val context = LocalContext.current
-    val viewModel: FindForMeViewModel = viewModel()
     val focusRequester = remember { FocusRequester() }
     var isTextVisible by remember { mutableStateOf(true) }
     var isRecording by remember { mutableStateOf(false) }
     var recordedText by remember { mutableStateOf("") }
     var showTextOptions by remember { mutableStateOf(false) }
+    var instructionText by remember { mutableStateOf(context.getString(R.string.instruction_find_for_me_text)) }
     var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
     val speechRecognizer = remember { SpeechRecognizer.createSpeechRecognizer(context) }
 
@@ -74,7 +74,7 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
                 focusRequester.requestFocus()
             }
             TalkBackText(
-                text = stringResource(id = R.string.instruction_find_for_me_text),
+                text = instructionText,
                 focusRequester = focusRequester
             )
         }
@@ -102,10 +102,16 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
                             recordedText = ""
                             showTextOptions = false
                             isRecording = true
-                            startRecordingAudio(context, speechRecognizer) { transcription ->
+                            startRecordingAudio(context, speechRecognizer, { newInstructionText ->
+                                isTextVisible = true
+                                isRecording = false
+                                instructionText = newInstructionText
+                            })
+                            { transcription ->
                                 recordedText = transcription
                                 showTextOptions = true
                                 isRecording = false
+                                isTextVisible = false
                             }
                         },
                         colors = ButtonDefaults.buttonColors(
@@ -142,9 +148,14 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
                         isTextVisible = false
                         isRecording = !isRecording
                         if (isRecording) {
-                            startRecordingAudio(context, speechRecognizer) { transcription ->
+                            startRecordingAudio(context, speechRecognizer, { newInstructionText ->
+                                isTextVisible = true
+                                isRecording = false
+                                instructionText = newInstructionText
+                            }) { transcription ->
                                 recordedText = transcription
                                 showTextOptions = true
+                                isTextVisible = false
                             }
                         } else {
                             stopRecording(speechRecognizer)
@@ -176,7 +187,12 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
     }
 }
 
-private fun startRecordingAudio(context: Context, speechRecognizer: SpeechRecognizer, onTranscriptionComplete: (String) -> Unit) {
+private fun startRecordingAudio(
+    context: Context,
+    speechRecognizer: SpeechRecognizer,
+    onInstructionUpdate: (String) -> Unit,
+    onTranscriptionComplete: (String) -> Unit
+) {
     val deviceLanguage = Locale.getDefault().toString()
     val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
         putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -185,7 +201,7 @@ private fun startRecordingAudio(context: Context, speechRecognizer: SpeechRecogn
 
     speechRecognizer.setRecognitionListener(object : RecognitionListener {
         override fun onReadyForSpeech(params: Bundle?) {
-            Toast.makeText(context, context.getString(R.string.recording_started_text), Toast.LENGTH_SHORT).show()
+            // Update instruction text here if necessary
         }
 
         override fun onBeginningOfSpeech() {
@@ -202,11 +218,11 @@ private fun startRecordingAudio(context: Context, speechRecognizer: SpeechRecogn
 
         override fun onEndOfSpeech() {
             // Called when the user stops speaking
-            Toast.makeText(context, context.getString(R.string.recording_ended_text), Toast.LENGTH_SHORT).show()
         }
 
         override fun onError(error: Int) {
-            Toast.makeText(context, context.getString(R.string.recording_error_text, error.toString()), Toast.LENGTH_SHORT).show()
+            // Update instruction text for error
+            onInstructionUpdate(context.getString(R.string.recording_error_text))
         }
 
         override fun onResults(results: Bundle?) {
@@ -214,7 +230,8 @@ private fun startRecordingAudio(context: Context, speechRecognizer: SpeechRecogn
             if (!matches.isNullOrEmpty()) {
                 onTranscriptionComplete(matches[0])
             } else {
-                Toast.makeText(context, context.getString(R.string.recording_unknown_text), Toast.LENGTH_SHORT).show()
+                // Update instruction text for unknown result
+                onInstructionUpdate(context.getString(R.string.recording_unknown_text))
             }
         }
 
@@ -234,9 +251,8 @@ private fun stopRecording(speechRecognizer: SpeechRecognizer) {
     speechRecognizer.stopListening()
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun FindForMeScreenPreview() {
-    ReadForMeScreen()
+    FindForMeScreen()
 }

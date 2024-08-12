@@ -33,7 +33,6 @@ import com.montanhajr.seeforme.R
 
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel = viewModel(),
     navController: NavController = NavController(context = LocalContext.current)
 ) {
     Box(
