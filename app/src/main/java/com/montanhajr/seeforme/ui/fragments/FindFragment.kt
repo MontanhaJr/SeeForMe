@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.montanhajr.seeforme.ui.screens.FindForMeScreen
-import com.montanhajr.seeforme.ui.screens.ReadForMeScreen
 
 class FindFragment : Fragment() {
 
@@ -17,7 +17,8 @@ class FindFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                FindForMeScreen()
+                val navController = findNavController()
+                FindForMeScreen(navController)
             }
         }
     }

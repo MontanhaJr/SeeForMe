@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.fragment.app.Fragment
+import com.montanhajr.seeforme.R
 import com.montanhajr.seeforme.ui.screens.SeeForMeScreen
 
 class CameraFragment : Fragment() {
@@ -15,8 +17,10 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         return ComposeView(requireContext()).apply {
+            val prompt = arguments?.getString("prompt")
+
             setContent {
-                SeeForMeScreen()
+                SeeForMeScreen(prompt ?: stringResource(id = R.string.seeForMe_prompt))
             }
         }
     }

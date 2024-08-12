@@ -83,13 +83,13 @@ fun HomeScreen(
                 }
             )
 
-            HomeButton(
-                text = "DESCRIBE FOR ME",
-                backgroundColor = Color(0xFFF48440),
-                onClick = {
-                    // Ação do botão 4
-                }
-            )
+//            HomeButton(
+//                text = "DESCRIBE FOR ME",
+//                backgroundColor = Color(0xFFF48440),
+//                onClick = {
+//                    // Ação do botão 4
+//                }
+//            )
         }
     }
 }

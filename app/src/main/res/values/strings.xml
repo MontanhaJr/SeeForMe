@@ -8,4 +8,7 @@
     <string name="image2_description">Cookies</string>
     <string name="image3_description">Cake</string>
     <string name="results_placeholder">(Results will appear here)</string>
+
+    <string name="seeForMe_prompt">Descreva o que você está vendo, utilize sempre a língua portuguesa na resposta podendo usar termos em inglês comuns no Brasil caso necessário. A resposta deve ter no máximo 30 palavras</string>
+    <string name="findForMe_prompt">Estou procurando %1$s. Se ele está nessa imagem, me descreva o local que está, se não está aqui, apenas responda "Não encontrei, mova a câmera para outro lugar"</string>
 </resources>

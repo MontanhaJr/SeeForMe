@@ -20,17 +20,30 @@
     </fragment>
 
     <fragment
+        android:id="@+id/findFragment"
+        android:name="com.montanhajr.seeforme.ui.fragments.FindFragment"
+        android:label="FindFragment">
+        <action
+            android:id="@+id/action_findFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+
+    </fragment>
+
+    <fragment
         android:id="@+id/cameraFragment"
         android:name="com.montanhajr.seeforme.ui.fragments.CameraFragment"
-        android:label="CameraFragment" />
+        android:label="CameraFragment">
+
+        <argument
+            android:name="prompt"
+            android:defaultValue="Test prompt"
+            app:argType="string" />
+
+    </fragment>
 
     <fragment
         android:id="@+id/readFragment"
         android:name="com.montanhajr.seeforme.ui.fragments.ReadFragment"
         android:label="ReadFragment" />
 
-    <fragment
-        android:id="@+id/findFragment"
-        android:name="com.montanhajr.seeforme.ui.fragments.FindFragment"
-        android:label="FindFragment" />
 </navigation>

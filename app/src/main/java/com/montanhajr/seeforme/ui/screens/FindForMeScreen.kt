@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
-import android.util.Log
 import android.widget.Toast
 import androidx.camera.core.ImageCapture
 import androidx.compose.foundation.background
@@ -15,27 +14,19 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mic
-import androidx.compose.material.icons.filled.RecordVoiceOver
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,19 +37,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import com.montanhajr.seeforme.R
 import com.montanhajr.seeforme.ui.CameraScreenPreview
 import com.montanhajr.seeforme.ui.TalkBackText
 import com.montanhajr.seeforme.ui.viewmodels.FindForMeViewModel
-import com.montanhajr.seeforme.ui.viewmodels.ReadForMeViewModel
 import com.montanhajr.seeforme.util.captureAndSendImage
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
-fun FindForMeScreen() {
+fun FindForMeScreen(navController: NavController = NavController(context = LocalContext.current)) {
     val context = LocalContext.current
+    val viewModel: FindForMeViewModel = viewModel()
     val focusRequester = remember { FocusRequester() }
     var isRecording by remember { mutableStateOf(false) }
     var recordedText by remember { mutableStateOf("") }
@@ -87,29 +84,51 @@ fun FindForMeScreen() {
                 Row(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 ) {
-                    Button(onClick = { /* Lógica para regravar */ }) {
+                    Button(
+                        onClick = {
+                            recordedText = ""
+                            showTextOptions = false
+                            isRecording = true
+                            startRecordingAudio(context, speechRecognizer) { transcription ->
+                                recordedText = transcription
+                                showTextOptions = true
+                                isRecording = false
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFF48440)
+                        )
+                    ) {
                         Text("Gravar novamente")
                     }
 
                     Spacer(modifier = Modifier.width(16.dp))
 
                     Button(onClick = {
+                        val prompt = context.getString(R.string.findForMe_prompt, recordedText)
                         isRecording = false
-                        startSendingImages(imageCapture, context)
+                        imageCapture?.let {
+                            val bundle = Bundle().apply {
+                                putString("prompt", prompt)
+                            }
+                            navController.navigate(R.id.action_findFragment_to_cameraFragment, bundle)
+                        }
                     }) {
-                        Text("Está correto")
+                        Text("Iniciar Busca")
                     }
                 }
             }
         } else {
-            Box(modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(64.dp)) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(64.dp)
+            ) {
                 IconButton(
                     onClick = {
                         isRecording = !isRecording
                         if (isRecording) {
-                            startRecordingAudio(context) { transcription ->
+                            startRecordingAudio(context, speechRecognizer) { transcription ->
                                 recordedText = transcription
                                 showTextOptions = true
                             }
@@ -121,7 +140,7 @@ fun FindForMeScreen() {
                         .align(Alignment.BottomCenter)
                         .size(80.dp)
                         .background(Color.White, CircleShape)
-                    ) {
+                ) {
                     if (!isRecording) {
                         Icon(
                             Icons.Default.Mic,
@@ -143,15 +162,7 @@ fun FindForMeScreen() {
     }
 }
 
-private fun startSendingImages(imageCapture: ImageCapture?, context: Context) {
-    imageCapture?.let {
-        // Aqui inicia o loop de envio de imagens a cada 5 segundos
-        // Semelhante ao que foi feito anteriormente
-    }
-}
-
-private fun startRecordingAudio(context: Context, onTranscriptionComplete: (String) -> Unit) {
-    val speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+private fun startRecordingAudio(context: Context, speechRecognizer: SpeechRecognizer, onTranscriptionComplete: (String) -> Unit) {
     val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
         putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         putExtra(RecognizerIntent.EXTRA_LANGUAGE, "pt-BR")

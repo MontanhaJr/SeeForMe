@@ -20,8 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.montanhajr.seeforme.R
 import com.montanhajr.seeforme.ui.CameraScreenPreview
 import com.montanhajr.seeforme.ui.TalkBackText
 import com.montanhajr.seeforme.ui.viewmodels.CameraViewModel
@@ -32,15 +34,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @Composable
-fun SeeForMeScreen() {
+fun SeeForMeScreen(prompt: String = "") {
     val viewModel: CameraViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     val focusRequester = remember { FocusRequester() }
-
-    val prompt =
-        "Descreva o que você está vendo, utilize sempre a língua portuguesa na resposta, " +
-                "podendo usar termos em inglês comuns no Brasil caso necessário. A resposta deve ter no máximo 30 palavras"
 
     Box(modifier = Modifier.fillMaxSize()) {
         CameraScreenPreview(
