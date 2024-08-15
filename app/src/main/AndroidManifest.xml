@@ -31,7 +31,7 @@
         </activity>
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4612925515848375~4189755628" />
+            android:value="${adMobAppId}" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

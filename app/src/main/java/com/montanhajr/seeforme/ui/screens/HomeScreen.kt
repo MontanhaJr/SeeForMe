@@ -22,13 +22,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.montanhajr.seeforme.ui.viewmodels.HomeViewModel
 import androidx.compose.foundation.layout.*
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.montanhajr.seeforme.BuildConfig
 import com.montanhajr.seeforme.R
 
 @Composable
@@ -91,7 +94,21 @@ fun HomeScreen(
 //                }
 //            )
         }
+        AdMobBanner(modifier = Modifier.fillMaxWidth().padding(top = 16.dp).align(Alignment.BottomCenter))
     }
+}
+
+@Composable
+fun AdMobBanner(modifier: Modifier) {
+    AndroidView(
+        modifier = modifier,
+        factory = { context ->
+        AdView(context).apply {
+            setAdSize(AdSize.BANNER)
+            adUnitId = BuildConfig.ADMOB_BANNER_UNIT_ID
+            loadAd(AdRequest.Builder().build())
+        }
+    })
 }
 
 @Composable
