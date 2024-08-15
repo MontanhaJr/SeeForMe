@@ -24,6 +24,8 @@ cameraCamera2 = "1.2.2"
 cameraLifecycle = "1.2.2"
 cameraView = "1.2.2"
 materialIconsExtended = "1.6.8"
+playServicesAds = "23.3.0"
+guava = "32.0.1-jre"
 
 
 [libraries]
@@ -56,6 +58,8 @@ androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", 
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycle" }
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraView" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
