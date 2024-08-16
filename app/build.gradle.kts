@@ -31,7 +31,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"teste\"")
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"teste2\"")
         }
     }
     compileOptions {
