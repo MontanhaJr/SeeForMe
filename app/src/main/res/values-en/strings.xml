@@ -34,5 +34,6 @@
     <string name="instruction_read_for_me_text">Tap the button below to take a photo and read the text in the image</string>
     <string name="progress_indicator_loading">Loading…</string>
     <string name="take_picture_button">Take picture</string>
+    <string name="generic_error">Error analyzing image, try again</string>
 
 </resources>

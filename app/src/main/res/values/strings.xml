@@ -5,6 +5,7 @@
     <string name="permission_dialog_body">Este aplicativo precisa da permissão de acesso à câmera e microfone para funcionar corretamente. Por favor, permita o acesso para continuar usando o aplicativo.</string>
     <string name="permission_dialog_ok">OK</string>
     <string name="permission_dialog_cancel">Cancelar</string>
+    <string name="generic_error">Erro ao analisar imagem, tente novamente</string>
 
     <string name="seeForMe_prompt">Descreva o que você está vendo, utilize sempre a língua portuguesa na resposta. A resposta deve ter no máximo 30 palavras</string>
     <string name="findForMe_prompt">Estou procurando %1$s. Se ele está nessa imagem, me descreva o local que está, se não está aqui, apenas responda "Não encontrei, mova a câmera para outro lugar</string>

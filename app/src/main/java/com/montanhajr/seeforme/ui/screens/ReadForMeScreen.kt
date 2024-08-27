@@ -103,11 +103,12 @@ fun ReadForMeScreen() {
 
             is ReadForMeViewModel.UiState.Error -> {
                 val error = (uiState as ReadForMeViewModel.UiState.Error).message
+                Log.e("ReadForMeScreen", "Error: $error")
                 LaunchedEffect(error) {
-                    focusRequester.freeFocus() // Resetar o foco antes de requisitar novamente
+                    focusRequester.freeFocus()
                     focusRequester.requestFocus()
                 }
-                TalkBackText(error, focusRequester)
+                TalkBackText(stringResource(id = R.string.generic_error), focusRequester)
             }
         }
 
