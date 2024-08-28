@@ -36,6 +36,7 @@ import com.montanhajr.seeforme.ui.CameraScreenPreview
 import com.montanhajr.seeforme.ui.TalkBackText
 import com.montanhajr.seeforme.ui.viewmodels.ReadForMeViewModel
 import com.montanhajr.seeforme.util.captureAndSendImage
+import com.montanhajr.seeforme.util.showDebugLog
 import kotlinx.coroutines.delay
 
 @Composable
@@ -103,7 +104,7 @@ fun ReadForMeScreen() {
 
             is ReadForMeViewModel.UiState.Error -> {
                 val error = (uiState as ReadForMeViewModel.UiState.Error).message
-                Log.e("ReadForMeScreen", "Error: $error")
+                error.showDebugLog("ReadForMeScreen")
                 LaunchedEffect(error) {
                     focusRequester.freeFocus()
                     focusRequester.requestFocus()

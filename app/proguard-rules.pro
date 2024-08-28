@@ -19,3 +19,13 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class * implements com.montanhajr.seeforme.** { *; }
+-keepattributes SourceFile,LineNumberTable
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** w(...);
+    public static *** v(...);
+    public static *** i(...);
+    public static *** e(...);
+}

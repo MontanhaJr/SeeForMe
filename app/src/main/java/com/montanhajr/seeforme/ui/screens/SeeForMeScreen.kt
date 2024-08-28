@@ -20,6 +20,7 @@ import com.montanhajr.seeforme.ui.CameraScreenPreview
 import com.montanhajr.seeforme.ui.TalkBackText
 import com.montanhajr.seeforme.ui.viewmodels.CameraViewModel
 import com.montanhajr.seeforme.util.captureAndSendImage
+import com.montanhajr.seeforme.util.showDebugLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -67,7 +68,8 @@ fun SeeForMeScreen(prompt: String = "") {
 
             is CameraViewModel.UiState.Error -> {
                 val error = (uiState as CameraViewModel.UiState.Error).message
-                Log.e("CameraScreen", "Error: $error")
+                error.showDebugLog("CameraScreen")
+
                 LaunchedEffect(error) {
                     focusRequester.requestFocus()
                 }

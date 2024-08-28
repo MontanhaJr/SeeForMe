@@ -1,5 +1,7 @@
 package com.montanhajr.seeforme.util
 
+import android.util.Log
+import com.montanhajr.seeforme.BuildConfig
 import kotlin.math.sqrt
 
 fun String.cosineSimilarity(textToCompare: String): Double {
@@ -15,4 +17,10 @@ fun String.cosineSimilarity(textToCompare: String): Double {
     val magnitude2 = sqrt(vector2.sumOf { it * it }.toDouble())
 
     return if (magnitude1 == 0.0 || magnitude2 == 0.0) 0.0 else dotProduct / (magnitude1 * magnitude2)
+}
+
+fun String.showDebugLog(screen: String) {
+    if (BuildConfig.DEBUG) {
+        Log.e(screen, "Error: $this")
+    }
 }

@@ -1,8 +1,16 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
+
+val localProperties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
+}
+
+val adMobBannerIdRelease: String = localProperties["bannerIDRelease"] as String
 
 android {
     namespace = "com.montanhajr.seeforme"
@@ -12,8 +20,8 @@ android {
         applicationId = "com.montanhajr.seeforme"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -31,7 +39,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"teste\"")
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", adMobBannerIdRelease)
         }
     }
     compileOptions {
