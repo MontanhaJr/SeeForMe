@@ -72,7 +72,7 @@ fun HomeScreen(
 
             HomeButton(
                 text = stringResource(id = R.string.read_for_me_button_home),
-                backgroundColor = Color(0xFFF48440),
+                backgroundColor = Color(0xFFE76F26),
                 onClick = {
                     navController.navigate(R.id.action_homeFragment_to_readFragment)
                 }
