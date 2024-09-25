@@ -7,7 +7,6 @@ import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.montanhajr.seeforme.BuildConfig
 import com.montanhajr.seeforme.interfaces.IImageProcessor
-import com.montanhajr.seeforme.ui.viewmodels.CameraViewModel.Constant.MODEL_NAME
 import com.montanhajr.seeforme.ui.viewmodels.CameraViewModel.Constant.SIMILARITY_THRESHOLD
 import com.montanhajr.seeforme.util.cosineSimilarity
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +28,7 @@ class CameraViewModel : ViewModel(), IImageProcessor {
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     private val generativeModel = GenerativeModel(
-        modelName = MODEL_NAME,
+        modelName = BuildConfig.GEMINI_MODEL_NAME,
         apiKey = BuildConfig.apiKey
     )
 
@@ -74,7 +73,6 @@ class CameraViewModel : ViewModel(), IImageProcessor {
     }
 
     private object Constant {
-        const val MODEL_NAME = "gemini-1.5-flash"
         const val SIMILARITY_THRESHOLD = 0.5
     }
 }

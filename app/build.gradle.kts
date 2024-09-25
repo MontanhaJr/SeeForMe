@@ -32,6 +32,7 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"ca-app-pub-3940256099942544/9214589741\"")
+            buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-1.5-flash-002\"")
         }
         release {
             isMinifyEnabled = false
@@ -40,6 +41,7 @@ android {
                 "proguard-rules.pro"
             )
             buildConfigField("String", "ADMOB_BANNER_UNIT_ID", adMobBannerIdRelease)
+            buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-1.5-flash-002\"")
         }
     }
     compileOptions {

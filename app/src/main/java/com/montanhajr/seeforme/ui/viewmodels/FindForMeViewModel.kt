@@ -7,7 +7,6 @@ import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.montanhajr.seeforme.BuildConfig
 import com.montanhajr.seeforme.interfaces.IImageProcessor
-import com.montanhajr.seeforme.ui.viewmodels.FindForMeViewModel.Constant.MODEL_NAME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -31,7 +30,7 @@ class FindForMeViewModel : ViewModel(), IImageProcessor {
     }
 
     private val generativeModel = GenerativeModel(
-        modelName = MODEL_NAME,
+        modelName = BuildConfig.GEMINI_MODEL_NAME,
         apiKey = BuildConfig.apiKey
     )
 
@@ -65,9 +64,5 @@ class FindForMeViewModel : ViewModel(), IImageProcessor {
                 _uiState.value = UiState.Error(e.localizedMessage ?: "")
             }
         }
-    }
-
-    private object Constant {
-        const val MODEL_NAME = "gemini-1.5-flash"
     }
 }

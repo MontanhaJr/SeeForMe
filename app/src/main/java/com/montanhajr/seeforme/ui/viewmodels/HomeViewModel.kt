@@ -20,7 +20,7 @@ class HomeViewModel : ViewModel() {
         _uiState.asStateFlow()
 
     private val generativeModel = GenerativeModel(
-        modelName = "gemini-1.5-flash",
+        modelName = BuildConfig.GEMINI_MODEL_NAME,
         apiKey = BuildConfig.apiKey
     )
 
