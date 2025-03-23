@@ -32,7 +32,7 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"ca-app-pub-3940256099942544/9214589741\"")
-            buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-1.5-flash-002\"")
+            buildConfigField("String", "GEMINI_MODEL_NAME", "\"gemini-2.0-flash-001\"")
         }
         release {
             isMinifyEnabled = false
