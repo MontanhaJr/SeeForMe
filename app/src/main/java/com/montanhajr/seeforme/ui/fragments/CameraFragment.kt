@@ -20,7 +20,9 @@ class CameraFragment : Fragment() {
             val prompt = arguments?.getString("prompt").takeIf { !it.isNullOrEmpty() }
 
             setContent {
-                SeeForMeScreen(prompt ?: stringResource(id = R.string.seeForMe_prompt))
+                SeeForMeScreen(onBack = {
+                    parentFragmentManager.popBackStack()
+                }, prompt = prompt ?: stringResource(id = R.string.seeForMe_prompt))
             }
         }
     }

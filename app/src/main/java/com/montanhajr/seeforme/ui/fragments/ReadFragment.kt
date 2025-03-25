@@ -16,7 +16,9 @@ class ReadFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                ReadForMeScreen()
+                ReadForMeScreen(onBack = {
+                    parentFragmentManager.popBackStack()
+                })
             }
         }
     }

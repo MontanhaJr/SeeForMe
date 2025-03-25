@@ -17,8 +17,14 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBackIos
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -33,6 +39,26 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import com.montanhajr.seeforme.ui.theme.PurpleGrey80
+import com.montanhajr.seeforme.ui.theme.darkOrange
+import com.montanhajr.seeforme.ui.theme.lightOrange
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomTopAppBar(onBack: () -> Unit, screenTitle: String) {
+    TopAppBar(
+        title = { Text(text = screenTitle, color = darkOrange) },
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(
+                    Icons.AutoMirrored.Filled.ArrowBackIos,
+                    contentDescription = "Voltar",
+                    tint = darkOrange
+                )
+            }
+        }
+    )
+}
 
 @Composable
 fun TalkBackText(text: String, focusRequester: FocusRequester) {
@@ -44,12 +70,7 @@ fun TalkBackText(text: String, focusRequester: FocusRequester) {
         modifier = Modifier
             .padding(16.dp)
             .background(
-                MaterialTheme.colorScheme.background.copy(
-                    alpha = 0.7f,
-                    red = 0.9922f,
-                    green = 0.8235f,
-                    blue = 0.7176f
-                )
+                lightOrange
             )
             .padding(16.dp)
             .heightIn(max = maxHeight)

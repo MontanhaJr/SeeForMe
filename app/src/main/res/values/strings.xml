@@ -13,9 +13,9 @@
 
     <!--    Home Screen-->
     <string name="accessibility_text_logo">Logo do App com a escrita See For Me</string>
-    <string name="see_for_me_button_home">Veja para Mim</string>
-    <string name="read_for_me_button_home">Leia para Mim</string>
-    <string name="find_for_me_button_home">Encontre para Mim</string>
+    <string name="see_for_me_name">Veja para Mim</string>
+    <string name="read_for_me_name">Leia para Mim</string>
+    <string name="find_for_me_name">Encontre para Mim</string>
 
     <!--    See For Me Screen-->
 

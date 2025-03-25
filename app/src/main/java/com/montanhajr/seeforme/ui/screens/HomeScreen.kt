@@ -63,7 +63,7 @@ fun HomeScreen(
             )
 
             HomeButton(
-                text = stringResource(id = R.string.see_for_me_button_home),
+                text = stringResource(id = R.string.see_for_me_name),
                 backgroundColor = Color(0xFFCA530B),
                 onClick = {
                     navController.navigate(R.id.action_homeFragment_to_cameraFragment)
@@ -71,7 +71,7 @@ fun HomeScreen(
             )
 
             HomeButton(
-                text = stringResource(id = R.string.read_for_me_button_home),
+                text = stringResource(id = R.string.read_for_me_name),
                 backgroundColor = Color(0xFFE76F26),
                 onClick = {
                     navController.navigate(R.id.action_homeFragment_to_readFragment)
@@ -79,7 +79,7 @@ fun HomeScreen(
             )
 
             HomeButton(
-                text = stringResource(id = R.string.find_for_me_button_home),
+                text = stringResource(id = R.string.find_for_me_name),
                 backgroundColor = Color(0xFFCA530B),
                 onClick = {
                     navController.navigate(R.id.action_homeFragment_to_findFragment)

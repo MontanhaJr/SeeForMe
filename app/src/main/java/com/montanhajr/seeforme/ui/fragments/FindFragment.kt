@@ -18,7 +18,9 @@ class FindFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 val navController = findNavController()
-                FindForMeScreen(navController)
+                FindForMeScreen(onBack = {
+                    parentFragmentManager.popBackStack()
+                }, navController = navController)
             }
         }
     }

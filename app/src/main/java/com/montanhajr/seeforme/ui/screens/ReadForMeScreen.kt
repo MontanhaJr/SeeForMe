@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.montanhajr.seeforme.R
 import com.montanhajr.seeforme.ui.CameraScreenPreview
+import com.montanhajr.seeforme.ui.CustomTopAppBar
 import com.montanhajr.seeforme.ui.TalkBackText
 import com.montanhajr.seeforme.ui.viewmodels.ReadForMeViewModel
 import com.montanhajr.seeforme.util.captureAndSendImage
@@ -40,7 +42,7 @@ import com.montanhajr.seeforme.util.showDebugLog
 import kotlinx.coroutines.delay
 
 @Composable
-fun ReadForMeScreen() {
+fun ReadForMeScreen(onBack: () -> Unit) {
     val viewModel: ReadForMeViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
@@ -51,97 +53,106 @@ fun ReadForMeScreen() {
     val loadingFocusRequester = remember { FocusRequester() }
 
     val prompt = stringResource(id = R.string.readForMe_prompt)
-
-    Box(modifier = Modifier.fillMaxSize()) {
-        CameraScreenPreview(
-            onCapture = { capture, _ ->
-                imageCapture = capture
-            }
-        )
-
-        if (isTextVisible) {
-            LaunchedEffect(Unit) {
-                delay(100) // delay for talkback focus
-                focusRequester.requestFocus()
-            }
-            TalkBackText(
-                text = stringResource(id = R.string.instruction_read_for_me_text),
-                focusRequester = focusRequester
-            )
+    Scaffold(
+        topBar = {
+            CustomTopAppBar(onBack, stringResource(R.string.read_for_me_name))
         }
-
-        when (uiState) {
-            is ReadForMeViewModel.UiState.Initial -> {
-                Log.d("CameraScreen", "Starting...")
-                LaunchedEffect(Unit) {
-                    focusRequester.freeFocus()
-                }
-            }
-
-            is ReadForMeViewModel.UiState.Loading -> {
-                LaunchedEffect(loadingFocusRequester) {
-                    delay(100) // delay for talkback focus
-                    loadingFocusRequester.requestFocus()
-                }
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .focusRequester(loadingFocusRequester)
-                        .focusable()
-                        .semantics {
-                            contentDescription =
-                                context.getString(R.string.progress_indicator_loading)
-                        })
-            }
-
-            is ReadForMeViewModel.UiState.Success -> {
-                val result = (uiState as ReadForMeViewModel.UiState.Success).output
-                LaunchedEffect(result, focusRequester) {
-                    focusRequester.requestFocus()
-                }
-                TalkBackText(result, focusRequester)
-            }
-
-            is ReadForMeViewModel.UiState.Error -> {
-                val error = (uiState as ReadForMeViewModel.UiState.Error).message
-                error.showDebugLog("ReadForMeScreen")
-                LaunchedEffect(error) {
-                    focusRequester.freeFocus()
-                    focusRequester.requestFocus()
-                }
-                TalkBackText(stringResource(id = R.string.generic_error), focusRequester)
-            }
-        }
-
+    ) { paddingValues ->
         Box(
             modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(64.dp)
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            Button(
-                onClick = {
-                    isTextVisible = false
-                    viewModel.startLoading()
-                    imageCapture?.let {
-                        captureAndSendImage(it, context, viewModel, prompt)
-                    }
-                },
-                modifier = Modifier
-                    .size(80.dp)
-                    .background(
-                        color = Color.White,
-                        shape = CircleShape
-                    )
-                    .padding(6.dp)
-                    .semantics {
-                        contentDescription = context.getString(R.string.take_picture_button)
-                    },
-                elevation = ButtonDefaults.buttonElevation(10.dp),
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFF48440)
+            CameraScreenPreview(
+                onCapture = { capture, _ ->
+                    imageCapture = capture
+                }
+            )
+
+            if (isTextVisible) {
+                LaunchedEffect(Unit) {
+                    delay(100) // delay for talkback focus
+                    focusRequester.requestFocus()
+                }
+                TalkBackText(
+                    text = stringResource(id = R.string.instruction_read_for_me_text),
+                    focusRequester = focusRequester
                 )
-            ) { }
+            }
+
+            when (uiState) {
+                is ReadForMeViewModel.UiState.Initial -> {
+                    Log.d("CameraScreen", "Starting...")
+                    LaunchedEffect(Unit) {
+                        focusRequester.freeFocus()
+                    }
+                }
+
+                is ReadForMeViewModel.UiState.Loading -> {
+                    LaunchedEffect(loadingFocusRequester) {
+                        delay(100) // delay for talkback focus
+                        loadingFocusRequester.requestFocus()
+                    }
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .focusRequester(loadingFocusRequester)
+                            .focusable()
+                            .semantics {
+                                contentDescription =
+                                    context.getString(R.string.progress_indicator_loading)
+                            })
+                }
+
+                is ReadForMeViewModel.UiState.Success -> {
+                    val result = (uiState as ReadForMeViewModel.UiState.Success).output
+                    LaunchedEffect(result, focusRequester) {
+                        focusRequester.requestFocus()
+                    }
+                    TalkBackText(result, focusRequester)
+                }
+
+                is ReadForMeViewModel.UiState.Error -> {
+                    val error = (uiState as ReadForMeViewModel.UiState.Error).message
+                    error.showDebugLog("ReadForMeScreen")
+                    LaunchedEffect(error) {
+                        focusRequester.freeFocus()
+                        focusRequester.requestFocus()
+                    }
+                    TalkBackText(stringResource(id = R.string.generic_error), focusRequester)
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(64.dp)
+            ) {
+                Button(
+                    onClick = {
+                        isTextVisible = false
+                        viewModel.startLoading()
+                        imageCapture?.let {
+                            captureAndSendImage(it, context, viewModel, prompt)
+                        }
+                    },
+                    modifier = Modifier
+                        .size(80.dp)
+                        .background(
+                            color = Color.White,
+                            shape = CircleShape
+                        )
+                        .padding(6.dp)
+                        .semantics {
+                            contentDescription = context.getString(R.string.take_picture_button)
+                        },
+                    elevation = ButtonDefaults.buttonElevation(10.dp),
+                    shape = CircleShape,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFF48440)
+                    )
+                ) { }
+            }
         }
     }
 }
@@ -150,5 +161,5 @@ fun ReadForMeScreen() {
 @Preview(showBackground = true)
 @Composable
 fun ReadForMeScreenPreview() {
-    ReadForMeScreen()
+    ReadForMeScreen({})
 }

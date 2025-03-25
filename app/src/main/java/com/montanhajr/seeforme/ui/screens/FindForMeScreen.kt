@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,11 +44,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.montanhajr.seeforme.R
 import com.montanhajr.seeforme.ui.CameraScreenPreview
+import com.montanhajr.seeforme.ui.CustomTopAppBar
 import com.montanhajr.seeforme.ui.TalkBackText
 import kotlinx.coroutines.delay
 
 @Composable
-fun FindForMeScreen(navController: NavController = NavController(context = LocalContext.current)) {
+fun FindForMeScreen(
+    onBack: () -> Unit,
+    navController: NavController = NavController(context = LocalContext.current)
+) {
     val context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
     var isTextVisible by remember { mutableStateOf(true) }
@@ -58,131 +63,151 @@ fun FindForMeScreen(navController: NavController = NavController(context = Local
     var imageCapture: ImageCapture? by remember { mutableStateOf(null) }
     val speechRecognizer = remember { SpeechRecognizer.createSpeechRecognizer(context) }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        CameraScreenPreview(
-            onCapture = { capture, _ ->
-                imageCapture = capture
-            }
-        )
-
-        if (isTextVisible) {
-            LaunchedEffect(Unit) {
-                delay(100) // delay for talkback focus
-                focusRequester.requestFocus()
-            }
-            TalkBackText(
-                text = instructionText,
-                focusRequester = focusRequester
-            )
+    Scaffold(
+        topBar = {
+            CustomTopAppBar(onBack, stringResource(R.string.find_for_me_name))
         }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            CameraScreenPreview(
+                onCapture = { capture, _ ->
+                    imageCapture = capture
+                }
+            )
 
-        if (showTextOptions) {
-            Column(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .padding(16.dp)
-            ) {
+            if (isTextVisible) {
                 LaunchedEffect(Unit) {
                     delay(100) // delay for talkback focus
                     focusRequester.requestFocus()
                 }
                 TalkBackText(
-                    text = recordedText,
-                    focusRequester
+                    text = instructionText,
+                    focusRequester = focusRequester
                 )
+            }
 
-                Row(
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+            if (showTextOptions) {
+                Column(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .padding(16.dp)
                 ) {
-                    Button(
-                        onClick = {
-                            recordedText = ""
-                            showTextOptions = false
-                            isRecording = true
-                            startRecordingAudio(context, speechRecognizer, { newInstructionText ->
-                                isTextVisible = true
-                                isRecording = false
-                                instructionText = newInstructionText
-                            })
-                            { transcription ->
-                                recordedText = transcription
-                                showTextOptions = true
-                                isRecording = false
-                                isTextVisible = false
-                            }
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFFF48440)
-                        )
-                    ) {
-                        Text(stringResource(id = R.string.record_again_button))
+                    LaunchedEffect(Unit) {
+                        delay(100) // delay for talkback focus
+                        focusRequester.requestFocus()
                     }
+                    TalkBackText(
+                        text = recordedText,
+                        focusRequester
+                    )
 
-                    Spacer(modifier = Modifier.width(16.dp))
-
-                    Button(onClick = {
-                        val prompt = context.getString(R.string.findForMe_prompt, recordedText)
-                        isRecording = false
-                        imageCapture?.let {
-                            val bundle = Bundle().apply {
-                                putString("prompt", prompt)
-                            }
-                            navController.navigate(R.id.action_findFragment_to_cameraFragment, bundle)
+                    Row(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    ) {
+                        Button(
+                            onClick = {
+                                recordedText = ""
+                                showTextOptions = false
+                                isRecording = true
+                                startRecordingAudio(
+                                    context,
+                                    speechRecognizer,
+                                    { newInstructionText ->
+                                        isTextVisible = true
+                                        isRecording = false
+                                        instructionText = newInstructionText
+                                    })
+                                { transcription ->
+                                    recordedText = transcription
+                                    showTextOptions = true
+                                    isRecording = false
+                                    isTextVisible = false
+                                }
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = Color(0xFFF48440)
+                            )
+                        ) {
+                            Text(stringResource(id = R.string.record_again_button))
                         }
-                    }) {
-                        Text(stringResource(id = R.string.start_looking_button))
+
+                        Spacer(modifier = Modifier.width(16.dp))
+
+                        Button(onClick = {
+                            val prompt = context.getString(R.string.findForMe_prompt, recordedText)
+                            isRecording = false
+                            imageCapture?.let {
+                                val bundle = Bundle().apply {
+                                    putString("prompt", prompt)
+                                }
+                                navController.navigate(
+                                    R.id.action_findFragment_to_cameraFragment,
+                                    bundle
+                                )
+                            }
+                        }) {
+                            Text(stringResource(id = R.string.start_looking_button))
+                        }
                     }
                 }
-            }
-        } else {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(64.dp)
-            ) {
-                IconButton(
-                    onClick = {
-                        isTextVisible = false
-                        isRecording = !isRecording
-                        if (isRecording) {
-                            startRecordingAudio(context, speechRecognizer, { newInstructionText ->
-                                isTextVisible = true
-                                isRecording = false
-                                instructionText = newInstructionText
-                            }) { transcription ->
-                                recordedText = transcription
-                                showTextOptions = true
-                                isTextVisible = false
-                            }
-                        } else {
-                            stopRecording(speechRecognizer)
-                        }
-                    },
+            } else {
+                Box(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .size(80.dp)
-                        .background(Color.White, CircleShape)
+                        .padding(64.dp)
                 ) {
-                    if (!isRecording) {
-                        Icon(
-                            Icons.Default.Mic,
-                            contentDescription = stringResource(id = R.string.accesibility_record_button),
-                            modifier = Modifier.size(30.dp),
-                            tint = Color(0xFFF48440)
-                        )
-                    } else {
-                        Icon(
-                            Icons.Default.Stop,
-                            contentDescription = stringResource(id = R.string.accesibility_stop_button),
-                            modifier = Modifier.size(30.dp),
-                            tint = Color(0xFFF48440)
-                        )
+                    IconButton(
+                        onClick = {
+                            isTextVisible = false
+                            isRecording = !isRecording
+                            if (isRecording) {
+                                startRecordingAudio(
+                                    context,
+                                    speechRecognizer,
+                                    { newInstructionText ->
+                                        isTextVisible = true
+                                        isRecording = false
+                                        instructionText = newInstructionText
+                                    }) { transcription ->
+                                    recordedText = transcription
+                                    showTextOptions = true
+                                    isTextVisible = false
+                                }
+                            } else {
+                                stopRecording(speechRecognizer)
+                            }
+                        },
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .size(80.dp)
+                            .background(Color.White, CircleShape)
+                    ) {
+                        if (!isRecording) {
+                            Icon(
+                                Icons.Default.Mic,
+                                contentDescription = stringResource(id = R.string.accesibility_record_button),
+                                modifier = Modifier.size(30.dp),
+                                tint = Color(0xFFF48440)
+                            )
+                        } else {
+                            Icon(
+                                Icons.Default.Stop,
+                                contentDescription = stringResource(id = R.string.accesibility_stop_button),
+                                modifier = Modifier.size(30.dp),
+                                tint = Color(0xFFF48440)
+                            )
+                        }
                     }
                 }
             }
         }
     }
 }
+
 
 private fun startRecordingAudio(
     context: Context,
@@ -251,5 +276,5 @@ private fun stopRecording(speechRecognizer: SpeechRecognizer) {
 @Preview(showBackground = true)
 @Composable
 fun FindForMeScreenPreview() {
-    FindForMeScreen()
+    FindForMeScreen({})
 }
